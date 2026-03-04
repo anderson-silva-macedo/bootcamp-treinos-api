@@ -1,24 +1,36 @@
-// ESM
-import Fastify from "fastify";
 import "dotenv/config";
+import { z } from "zod";
+import Fastify from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  ZodTypeProvider,
+} from "fastify-type-provider-zod";
 
-const fastify = Fastify({
+const app = Fastify({
   logger: true,
 });
 
-fastify.get("/", async (request, reply) => {
-  return { hello: "world" };
+app.setValidatorCompiler(validatorCompiler);
+app.setSerializerCompiler(serializerCompiler);
+
+app.withTypeProvider<ZodTypeProvider>().route({
+  method: "GET",
+  url: "/",
+  schema: {
+    description: "Hello route",
+    tags: ["Hello"], // ✅ corrigido
+    response: {
+      200: z.object({
+        message: z.string(),
+      }),
+    },
+  },
+  handler: async () => {
+    return {
+      message: "Hello",
+    };
+  },
 });
 
-/**
- * Run the server!
- */
-const start = async () => {
-  try {
-    await fastify.listen({ port: Number(process.env.PORT) });
-  } catch (err) {
-    fastify.log.error(err);
-    process.exit(1);
-  }
-};
-start();
+await app.listen({ port: 3000 });
