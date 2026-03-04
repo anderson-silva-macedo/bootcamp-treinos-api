@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
+  //"$schema": "https://json.schemastore.org/tsconfig",
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     "moduleResolution": "nodenext",
@@ -13,18 +13,13 @@
     "target": "es2024",
     "types": [],
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
 
     // Recommended Options
     "strict": true,
-    "jsx": "react-jsx",
+    //"jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
