@@ -21,6 +21,7 @@ app.withTypeProvider<ZodTypeProvider>().route({
     description: "Hello route",
     tags: ["Hello"],
     response: {
+      // 👈 FALTAVA ISSO
       200: z.object({
         message: z.string(),
       }),
