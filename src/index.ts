@@ -1,7 +1,11 @@
 import "dotenv/config";
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
+
 import { z } from "zod";
 import Fastify from "fastify";
 import {
+  jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
   ZodTypeProvider,
@@ -14,6 +18,27 @@ const app = Fastify({
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
 
+await app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: "SampleApi",
+      description: "Sample Backend service",
+      version: "1.0.0",
+    },
+    servers: [
+      {
+        description: "Localhost",
+        url: "http://localhost:3000",
+      },
+    ],
+    transform: jsonSchemaTransform,
+  },
+});
+
+await app.register(fastifySwaggerUi, {
+  routePrefix: "/docs",
+});
+
 app.withTypeProvider<ZodTypeProvider>().route({
   method: "GET",
   url: "/",
@@ -21,13 +46,12 @@ app.withTypeProvider<ZodTypeProvider>().route({
     description: "Hello route",
     tags: ["Hello"],
     response: {
-      // 👈 FALTAVA ISSO
       200: z.object({
         message: z.string(),
       }),
     },
   },
-  handler: async () => {
+  handler: () => {
     return {
       message: "Hello",
     };
